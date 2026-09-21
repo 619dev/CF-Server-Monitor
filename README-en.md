@@ -371,6 +371,15 @@ Cloudflare Turnstile can be enabled from the admin panel to reduce abuse of publ
 
 Same-origin access is recommended by default. If you use an external static frontend or multi-site aggregation, add trusted origins to `CORS_ALLOWED_ORIGINS`.
 
+### GitHub Login
+
+1. Create an [OAuth App](https://github.com/settings/developers) under GitHub `Settings → Developer settings → OAuth Apps`.
+2. Enter its Client ID and Client Secret under Admin Login Settings, then save the configuration.
+3. Copy the exact `Authorization callback URL` shown by CFSM into the GitHub OAuth App.
+4. While signed in with the admin password, click Bind GitHub Account and authorize it. CFSM stores the account's immutable numeric GitHub ID, and only that account can use GitHub login afterward.
+
+The GitHub OAuth configuration and binding are stored in the existing D1 `site_options` JSON and do not require a schema upgrade. The Client Secret is not returned by the settings read API; leave it blank on later saves to preserve the stored value. Rebinding requires an authenticated admin session. Keep password login enabled as a recovery path.
+
 ### CSP
 
 The project enables a conservative Content Security Policy by default. Third-party backgrounds, external CSS/JS, fonts, images, and WebSocket/API origins must be added to the CSP allowlists in the admin panel before they can load.

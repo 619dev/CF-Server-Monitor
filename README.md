@@ -370,6 +370,15 @@ npm run build:github-page
 
 可在后台启用 Cloudflare Turnstile，用于降低公开 API 和登录入口被刷的风险。多站点模式下，如果多个站点都启用 Turnstile，请保持 Site Key 一致。
 
+### GitHub 登录
+
+1. 在 GitHub `Settings → Developer settings → OAuth Apps` 中创建 [OAuth App](https://github.com/settings/developers)。
+2. 在 CFSM 后台的“管理员登录设置”中填写 Client ID 和 Client Secret，保存配置。
+3. 将后台显示的 `Authorization callback URL` 原样填入 GitHub OAuth App。
+4. 保持管理员密码登录状态，点击“绑定 GitHub 账号”并完成授权。系统会自动保存该账号不可变的 GitHub 数字 ID，此后仅该账号能够使用 GitHub 登录。
+
+GitHub OAuth 配置和绑定结果与其他站点配置一样保存在 D1 的 `site_options` 中，不需要升级数据库结构。Client Secret 不会通过后台设置读取接口返回；再次保存时留空即可保留原值。重新绑定必须处于管理员登录状态，建议保留账号密码登录作为应急入口。
+
 ### CORS
 
 默认建议仅同源访问。如果需要独立前台或多站点聚合，在 `CORS_ALLOWED_ORIGINS` 中加入可信来源。
