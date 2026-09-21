@@ -9,15 +9,10 @@
  * @param {string} secretKey - Turnstile secret key
  * @returns {Promise<boolean>} 验证结果
  */
-const TURNSTILE_VERIFY_TIMEOUT_MS = 5000;
-
 export async function verifyTurnstileToken(token, secretKey) {
   if (!token || !secretKey) {
     return false;
   }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TURNSTILE_VERIFY_TIMEOUT_MS);
   
   try {
     const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -28,8 +23,7 @@ export async function verifyTurnstileToken(token, secretKey) {
       body: JSON.stringify({
         secret: secretKey,
         response: token
-      }),
-      signal: controller.signal
+      })
     });
     
     const data = await response.json();
@@ -37,8 +31,6 @@ export async function verifyTurnstileToken(token, secretKey) {
   } catch (e) {
     console.error('Turnstile verification error:', e);
     return false;
-  } finally {
-    clearTimeout(timeout);
   }
 }
 
